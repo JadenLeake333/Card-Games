@@ -1,7 +1,7 @@
 import os
 import pygame
 
-def draw_cards(screen : int, board : list):
+def draw_cards(screen : int, board : list) -> tuple:
     coords = {}
     for i in range(len(board)):
         for j in range(len(board[i])):
