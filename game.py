@@ -1,20 +1,22 @@
 import os
 import pygame
 
-def draw_cards(screen : int, board : list) -> tuple:
+def draw_cards(screen : pygame.Surface, board : list) -> tuple:
     coords = {}
     for i in range(len(board)):
         for j in range(len(board[i])):
+            card_x = 520 / 9 + j * 125
+            card_y = 720 / 40 + i * 110
             if board[i][j] == 0:
                 card = pygame.image.load(os.path.join('assets','cardback.PNG'))
                 resize_card = pygame.transform.scale(card,(100, 100))
-                screen.blit(resize_card, (520 / 9 + j * 75, 720 / 40 + i * 100))
-                coords.update({f'{i},{j}' : [520 / 9 + j * 75 , 720 / 40 + i * 100]})
+                screen.blit(resize_card, (card_x, card_y))
+                coords.update({f'{i},{j}' : [card_x , card_y]})
             else:
                 card = pygame.image.load(os.path.join('assets',f'{board[i][j]}-card.PNG'))
                 resize_card = pygame.transform.scale(card,(100, 100))
-                screen.blit(resize_card, (520 / 9 + j * 75, 720 / 40 + i * 100))
-                coords.update({f'{i},{j}' : [520 / 9 + j * 75 , 720 / 40 + i * 100]})
+                screen.blit(resize_card, (card_x, card_y))
+                coords.update({f'{i},{j}' : [card_x , card_y]})
             
     return coords
 
@@ -28,17 +30,29 @@ def check_card(coords : dict, cover : list, board : list, x: int, y : int):
                 clicked = i,j
     return clicked
 
-def answer_sound(answer: bool) -> None:
+def answer_sound(answer: str) -> None:
 
-    correct = pygame.mixer.Sound(os.path.join("assets","sounds","correct.mp3"))
-    incorrect = pygame.mixer.Sound(os.path.join("assets","sounds","incorrect.mp3"))
+    sound = pygame.mixer.Sound(os.path.join("assets","sounds",f"{answer}.mp3"))
 
-    if answer:
-        pygame.mixer.Sound.play(correct)
-        pygame.mixer.music.stop()
-    else:
-        pygame.mixer.Sound.play(incorrect)
-        pygame.mixer.music.stop()
+    pygame.mixer.Sound.play(sound)
+    pygame.mixer.music.stop()
+
+def update_text(misses : int, start_time : float, screen : pygame.Surface) -> None:
+    font = pygame.font.Font(None, 54)
+    black = 0,0,0
+
+    passed_time = pygame.time.get_ticks() - start_time
+
+    timer_text = font.render("Timer",True,black)
+    timer = font.render(str(int(passed_time/1000)), True, black)
+
+    miss_text = font.render("Misses",True,black)
+    miss = font.render(str(misses), True, black)
+
+    screen.blit(timer_text, (575, 25))
+    screen.blit(timer, (575, 65))
+    screen.blit(miss_text, (575, 110))
+    screen.blit(miss, (575, 145))
 
 def main():
     import sys
@@ -52,10 +66,8 @@ def main():
 
     game.print_board(board)
 
-    size = width, height = 620, 720
-    font = pygame.font.Font(None, 54)
+    size = width, height = 725, 775
     green = 85,200,60
-    black = 0,0,0
 
     screen = pygame.display.set_mode(size)
 
@@ -74,15 +86,8 @@ def main():
 
     start_time = pygame.time.get_ticks()
 
-    while 1:
-
-        passed_time = pygame.time.get_ticks() - start_time
-
-        timer_text = font.render("Timer",True,black)
-        timer = font.render(str(int(passed_time/1000)), True, black)
-
-        miss_text = font.render("Misses",True,black)
-        miss = font.render(str(misses), True, black)
+    game_over = False
+    while not game_over:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,20 +95,18 @@ def main():
         
         screen.fill(green)
         coords = draw_cards(screen, game_cover)
-        screen.blit(timer_text, (460, 220))
-        screen.blit(timer, (460, 260))
-        screen.blit(miss_text, (460, 320))
-        screen.blit(miss, (460, 360))
-
-
+        
         if game.check_complete(game_cover):
-            for i in range(100):
-                answer_sound(True)
+            if misses == 0:
+                answer_sound("perfect")
+            answer_sound("winner")
+            pygame.time.wait(6000)
+            game_over = True
 
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-
+            print(pos)
             clicked_card = check_card(coords,game_cover, board,*pos)
 
             if clicked_card == None:
@@ -121,16 +124,17 @@ def main():
 
                 if guesses[0][2] == guesses[1][2]:
                     # play sound
-                    answer_sound(True)
+                    answer_sound("correct")
                     guesses.clear()
                 else:
                     # Reset clicked numbers
-                    answer_sound(False)
+                    answer_sound("incorrect")
                     pygame.time.wait(1000)
                     game_cover[guesses[0][0]][guesses[0][1]], game_cover[guesses[1][0]][guesses[1][1]] = 0, 0
                     misses += 1
                     guesses.clear()
 
+        update_text(misses, start_time, screen)
         # Display on screen
         pygame.display.flip()
 
