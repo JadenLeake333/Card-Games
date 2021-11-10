@@ -8,12 +8,12 @@ def draw_cards(screen : pygame.Surface, board : list) -> tuple:
             card_x = 520 / 9 + j * 125
             card_y = 720 / 40 + i * 110
             if board[i][j] == 0:
-                card = pygame.image.load(os.path.join('assets','cardback.PNG'))
+                card = pygame.image.load(os.path.join('assets','cards','cardback.PNG'))
                 resize_card = pygame.transform.scale(card,(100, 100))
                 screen.blit(resize_card, (card_x, card_y))
                 coords.update({f'{i},{j}' : [card_x , card_y]})
             else:
-                card = pygame.image.load(os.path.join('assets',f'{board[i][j]}-card.PNG'))
+                card = pygame.image.load(os.path.join('assets','cards',f'{board[i][j]}-card.PNG'))
                 resize_card = pygame.transform.scale(card,(100, 100))
                 screen.blit(resize_card, (card_x, card_y))
                 coords.update({f'{i},{j}' : [card_x , card_y]})
@@ -54,7 +54,7 @@ def update_text(misses : int, start_time : float, screen : pygame.Surface) -> No
     screen.blit(miss_text, (575, 110))
     screen.blit(miss, (575, 145))
 
-def main():
+def play_game():
     import sys
     from memorize import card_game
 
@@ -137,5 +137,3 @@ def main():
         update_text(misses, start_time, screen)
         # Display on screen
         pygame.display.flip()
-
-main()
