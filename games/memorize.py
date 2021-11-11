@@ -76,8 +76,8 @@ class card_game:
         cards = []
         for i in range(len(board)):
             for j in range(len(board[i])):
-                card_x = 520 / 9 + j * 125
-                card_y = 720 / 40 + i * 110
+                card_x = 520 / 9 + j * 120
+                card_y = 720 / 40 + i * 105
                 if cover[i][j] == 0:
                     card_path = os.path.join('assets','cards','cardback.PNG')
 

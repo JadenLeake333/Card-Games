@@ -2,12 +2,13 @@ import os
 import pygame
 
 class Cards:
-    def __init__(self, img_path : str, name : str, size : tuple, position : tuple, index : tuple) -> None:
+    def __init__(self, img_path : str, name : str, size : tuple, position : tuple, index : tuple, module = None) -> None:
         self.img_path = img_path
         self.name = name
         self.size = size
         self.position = position
         self.index = index
+        self.module = module
     
     def draw_card(self, screen : pygame.Surface) -> None:
         card_image = pygame.image.load(self.img_path)
@@ -30,5 +31,9 @@ class Cards:
 
     def get_index(self):
         return self.index
+
+    def get_position(self):
+        return self.position
+
 
 
