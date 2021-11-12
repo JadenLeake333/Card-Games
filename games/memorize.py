@@ -14,7 +14,7 @@ class card_game:
         self.green = 85,200,60
         self.screen = pygame.display.set_mode(self.size)
 
-        self.cards = cards = {
+        self.cards = {
             2 : 0,
             3 : 0,
             4 : 0,
@@ -79,11 +79,11 @@ class card_game:
                 card_x = 520 / 9 + j * 120
                 card_y = 720 / 40 + i * 105
                 if cover[i][j] == 0:
-                    card_path = os.path.join('assets','cards','cardback.PNG')
+                    card_path = os.path.join('assets','memorize-cards','cardback.PNG')
 
                     cards.append(Cards(card_path,board[i][j],(100,100),(card_x,card_y),(i,j)))
                 else:
-                    card_path = os.path.join('assets','cards',f'{board[i][j]}-card.PNG')
+                    card_path = os.path.join('assets','memorize-cards',f'{board[i][j]}-card.PNG')
 
                     cards.append(Cards(card_path,board[i][j],(100,100),(card_x,card_y),(i,j)))
                 

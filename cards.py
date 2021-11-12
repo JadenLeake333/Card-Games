@@ -2,7 +2,7 @@ import os
 import pygame
 
 class Cards:
-    def __init__(self, img_path : str, name : str, size : tuple, position : tuple, index : tuple, module = None) -> None:
+    def __init__(self, img_path : str, name : str, size : tuple, position : tuple, index: tuple  = (0,0), module = None) -> None:
         self.img_path = img_path
         self.name = name
         self.size = size

@@ -1,7 +1,3 @@
-
-# Title screen will dynamically display all games using the assets/thumbnails as pictures, and the names of the pictures as the titles. Clicking on them will play its respective game. Maybe use the "Cards" class by adding a parameter. When clicked use importlib to dyncamically call the module and start the game. Each game needs to have the same entry method.#
-
-
 def draw_main_screen():
     import os
     from cards import Cards
@@ -10,10 +6,9 @@ def draw_main_screen():
     directories = os.listdir("games")
     directories.pop()
     for idx, mods in enumerate(directories):
-        module = mods.strip(".py")
+        module = mods.replace(".py","")
         game_img = os.path.join('assets','thumbnails',f'{module}.PNG')
-        games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx * 120, 720 / 40 + idx * 400), (0,0),f"{module}"))
-    print(games)
+        games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx * 205, 720 / 40 + idx % 3), (0,0),f"{module}"))
     return games
 
 def about_page():
@@ -23,10 +18,8 @@ def main():
     import os
     import pygame
     import importlib
-    from games.memorize import card_game
 
     pygame.init()
-    clock = pygame.time.Clock()
     screen_size = height, width =  705, 725
     bg = (25, 25, 105)
     black = (0,0,0)
@@ -47,7 +40,7 @@ def main():
         for game in game_list:
             game.draw_card(screen)
             text_postition = game.get_position()
-            game_name = font.render(f"{game.get_name()} game",True,black)
+            game_name = font.render(f"{game.get_name()}",True,black)
             screen.blit(game_name, (text_postition[0], text_postition[1] + 200))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
