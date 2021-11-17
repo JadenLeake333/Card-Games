@@ -97,6 +97,13 @@ class card_game:
             pygame.display.flip()
 
             if self.check_complete(len(self.cards)):
+                self.screen.fill(self.green)
+                create_cards = self.draw_cards()
+                for card in create_cards:
+                    card.draw_card(self.screen)
+                    del card
+                pygame.display.flip()
                 self.answer_sound("winner")
                 pygame.time.wait(6000)
+
                 return

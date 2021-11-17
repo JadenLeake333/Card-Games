@@ -160,6 +160,8 @@ class card_game:
                     self.answer_sound("perfect")
                 self.answer_sound("winner")
                 pygame.time.wait(6000)
+                for card in create_cards:
+                    del card
                 game_over = True
 
             for card in create_cards:

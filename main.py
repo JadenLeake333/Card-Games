@@ -4,11 +4,18 @@ def draw_main_screen():
     
     games = []
     directories = os.listdir("games")
-    directories.pop()
-    for idx, mods in enumerate(directories):
-        module = mods.replace(".py","")
-        game_img = os.path.join('assets','thumbnails',f'{module}.PNG')
-        games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx * 205, 720 / 40 + idx % 3), (0,0),f"{module}"))
+    directories.pop() # Removes __pycache__
+    y_multiple = 0
+    for idx,mods in enumerate(directories):
+        if idx != 0 and idx % 3 == 0:
+            y_multiple += 250
+            module = mods.replace(".py","")
+            game_img = os.path.join('assets','thumbnails',f'{module}.PNG')
+            games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx % 3 * 205, 720 / 40  + 1 * y_multiple), (0,0),f"{module}"))
+        else:
+            module = mods.replace(".py","")
+            game_img = os.path.join('assets','thumbnails',f'{module}.PNG')
+            games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx % 3 * 205, 720 / 40 + 1 * y_multiple), (0,0),f"{module}"))
     return games
 
 def about_page():
