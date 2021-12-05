@@ -88,9 +88,9 @@ class card_game:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(pos)
                 if self.selected != None:
-                    self.selected.set_position((pos[0] - 50, pos[1] - 35))
+                    self.selected.position = (pos[0] - 50, pos[1] - 35)
+                    self.selected.selected(False)
                     self.selected = None
                 else:
                     for card in create_cards:

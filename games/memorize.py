@@ -49,12 +49,12 @@ class card_game:
     def fill_board(self):
         import random
 
-        for i in range(len(self.game_board)):
-            for j in range(len(self.game_board[i])):
-                if self.game_board[i][j] == 0:
+        for idx,i in enumerate(self.game_board):
+            for jdx,j in enumerate(self.game_board[idx]):
+                if self.game_board[idx][jdx] == 0:
                     get_card_index = random.choice(list(self.cards.keys()))
                     
-                    self.game_board[i][j] = get_card_index
+                    self.game_board[idx][jdx] = get_card_index
                     self.cards[get_card_index] = self.cards[get_card_index] + 1
 
                     if self.cards[get_card_index] == 2:
@@ -74,18 +74,18 @@ class card_game:
 
     def draw_cards(self, board : list, cover : list) -> tuple:
         cards = []
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                card_x = 520 / 9 + j * 120
-                card_y = 720 / 40 + i * 105
-                if cover[i][j] == 0:
+        for idx,i in enumerate(board):
+            for jdx,j in enumerate(board[idx]):
+                card_x = 520 / 9 + jdx * 120
+                card_y = 720 / 40 + idx * 105
+                if cover[idx][jdx] == 0:
                     card_path = os.path.join('assets','memorize-cards','cardback.PNG')
 
-                    cards.append(Cards(card_path,board[i][j],(100,100),(card_x,card_y),(i,j)))
+                    cards.append(Cards(card_path,board[idx][jdx],(100,100),(card_x,card_y),(idx,jdx)))
                 else:
-                    card_path = os.path.join('assets','memorize-cards',f'{board[i][j]}-card.PNG')
+                    card_path = os.path.join('assets','memorize-cards',f'{board[idx][jdx]}-card.PNG')
 
-                    cards.append(Cards(card_path,board[i][j],(100,100),(card_x,card_y),(i,j)))
+                    cards.append(Cards(card_path,board[idx][jdx],(100,100),(card_x,card_y),(idx,jdx)))
                 
         return cards
 
@@ -171,8 +171,8 @@ class card_game:
                 pos = pygame.mouse.get_pos()
                 print(pos)
                 for card in create_cards:
-                   if card.clicked(pos):
-                       i,j = card.get_index()
+                   if card.clicked(pos) and card.clickable:
+                       i,j = card.index
                        if game_cover[i][j] == 0:
                         game_cover[i][j] = board[i][j]
                         guesses.append((i,j,board[i][j]))

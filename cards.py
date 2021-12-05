@@ -3,21 +3,21 @@ import pygame
 
 class Cards:
     def __init__(self, img_path : str, name : str, size : tuple, position : tuple, index: tuple  = (0,0), outline : bool = False, selected : bool = False, clickable : bool = True) -> None:
-        self.img_path = img_path
-        self.name = name
-        self.size = size
-        self.position = position
-        self.index = index
-        self.outline = outline
-        self.selected = selected
-        self.clickable = clickable
+        self._img_path = img_path
+        self._name = name
+        self._size = size
+        self._position = position
+        self._index = index
+        self._outline = outline
+        self._selected = selected
+        self._clickable = clickable
     
     def draw_card(self, screen : pygame.Surface) -> None:
-        card_image = pygame.image.load(self.img_path)
-        card_resize = pygame.transform.scale(card_image,self.size)
-        if self.selected == True and self.outline == True:
-            pygame.draw.rect(screen, (0,0,255), pygame.Rect((self.position[0],self.position[1]), (100,100)), 15)
-        screen.blit(card_resize,self.position)
+        card_image = pygame.image.load(self._img_path)
+        card_resize = pygame.transform.scale(card_image,self._size)
+        if self._selected == True and self._outline == True:
+            pygame.draw.rect(screen, (0,0,255), pygame.Rect((self._position[0],self._position[1]), (100,100)), 15)
+        screen.blit(card_resize,self._position)
 
     def point_in_rectanlge(self, px, py, rw, rh, rx, ry):
         if px > rx and px < rx  + rw:
@@ -26,30 +26,71 @@ class Cards:
         return False
 
     def clicked(self, pos : tuple)-> bool:
-        if self.point_in_rectanlge(pos[0], pos[1], self.size[0], self.size[1], self.position[0], self.position[1]):
-            self.selected = True
+        if self.point_in_rectanlge(pos[0], pos[1], self._size[0], self._size[1], self._position[0], self._position[1]):
+            self._selected = True
             return True
-        self.selected = False
+        self._selected = False
         return False
 
-    def get_name(self):
-        return self.name
+    @property
+    def image(self):
+        return self._img_path 
 
-    def get_index(self):
-        return self.index
+    @image.setter
+    def image(self, img):
+        self._img_path = os.path.join('assets','full-deck',f'{img}')
 
-    def get_position(self):
-        return self.position
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        self._name
     
-    def set_position(self, pos):
-        self.position = pos
-        self.selected = False
+    @property
+    def index(self):
+        return self._index
     
-    def set_image(self, img):
-        self.img_path = os.path.join('assets','full-deck',f'{img}')
+    @index.setter
+    def index(self, idx):
+        self._index = idx
 
-    def is_clickable(self):
-        return self.clickable
+    @property
+    def position(self):
+        return self._position
+    
+    @position.setter
+    def position(self, pos):
+        self._position = pos
+
+    def get_info(self):
+        return {
+            "img_path" : self._img_path,
+            "name" : self._name,
+            "size" : self._size,
+            "position" : self._position,
+            "index" : self._index,
+            "outline" : self._outline,
+            "selected" : self._selected,
+            "clickable" : self._clickable
+        }
+
+    @property
+    def clickable(self, on=None):
+        return self._clickable
+
+    @clickable.setter
+    def clickable(self,click):
+        self._clickable = click
+
+    def selected(self,selected):
+        self._selected = selected
+   
+    
+
+
+
 
 
 

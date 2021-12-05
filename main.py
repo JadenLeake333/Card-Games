@@ -6,6 +6,7 @@ def draw_main_screen():
     directories = os.listdir("games")
     directories.pop() # Removes __pycache__
     y_multiple = 0
+
     for idx,mods in enumerate(directories):
         if idx != 0 and idx % 3 == 0:
             y_multiple += 250
@@ -18,19 +19,18 @@ def draw_main_screen():
             games.append(Cards(game_img,f"{module}",(200,200),(520 / 9 + idx % 3 * 205, 720 / 40 + 1 * y_multiple), (0,0),f"{module}"))
     return games
 
-def about_page():
-    import pygame
-
 def main():
     import os
     import pygame
     import importlib
 
     pygame.init()
+
     screen_size = height, width =  705, 725
     bg = (25, 25, 105)
     black = (0,0,0)
     button_size = 120,50
+
     screen = pygame.display.set_mode(screen_size)
 
     game_list = draw_main_screen()
@@ -46,8 +46,8 @@ def main():
 
         for game in game_list:
             game.draw_card(screen)
-            text_postition = game.get_position()
-            game_name = font.render(f"{game.get_name()}",True,black)
+            text_postition = game.position
+            game_name = font.render(f"{game.name}",True,black)
             screen.blit(game_name, (text_postition[0], text_postition[1] + 200))
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -55,7 +55,8 @@ def main():
 
             for game in game_list:
                 if game.clicked(pos):
-                    play = importlib.import_module(f"games.{game.get_name()}")
+                    # Dynamically import the class being used. Each class has the same format to run its respective game
+                    play = importlib.import_module(f"games.{game.name}")
                     game_selection = play.card_game()
                     game_selection.play_game()
 
@@ -65,4 +66,9 @@ def main():
     sys.exit
     
 if __name__ == '__main__':
+    # from updater import check_updates
+    # if check_updates():
+    #     main()
+    # else:
+    #     print("You need to download the latest update!")
     main()

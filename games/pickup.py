@@ -88,10 +88,10 @@ class card_game:
                 pos = pygame.mouse.get_pos()
                 print(pos)
                 for card in create_cards:
-                   if card.clicked(pos):
+                   if card.clicked(pos) and card.clickable:
                        print("removing")
 
-                       self.cards.remove(card.get_name())
+                       self.cards.remove(card.name)
                        self.initialized_cards.remove(card)
 
             pygame.display.flip()
